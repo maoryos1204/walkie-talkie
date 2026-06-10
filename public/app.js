@@ -53,9 +53,52 @@ function doJoin(id) {
 
 // Auto-rejoin saved room on page load
 window.addEventListener('load', () => {
+  registerServiceWorker();
   const saved = localStorage.getItem('wt-room');
   if (saved) doJoin(saved);
 });
+
+// ── Service Worker + Push ──────────────────────────────────────────────────
+
+let pushSubscription = null;
+
+async function registerServiceWorker() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  try {
+    const reg = await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.ready;
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+    const { key } = await fetch('/vapid-key').then(r => r.json());
+    pushSubscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(key)
+    });
+  } catch (e) {
+    // Push not available — silent fallback
+  }
+}
+
+async function registerPushForRoom(id) {
+  if (!pushSubscription) return;
+  await fetch('/push-subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ roomId: id, subscription: pushSubscription })
+  });
+  await fetch('/push-register-socket', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ socketId: socket.id, endpoint: pushSubscription.endpoint })
+  });
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = atob(base64);
+  return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+}
 
 // ── Socket events ──────────────────────────────────────────────────────────
 
@@ -68,7 +111,8 @@ socket.on('joined', ({ roomId: id, isInitiator: init }) => {
 
   if (isInitiator) showScreen(waitingScreen);
 
-  initMedia(); // kick off mic request right away (don't await – runs in background)
+  initMedia();
+  registerPushForRoom(id);
 });
 
 socket.on('room-full', () => {
