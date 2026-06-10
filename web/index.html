@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="שמוקי טוק - מכשיר הקשר הפרטי שלך">
+  <meta name="theme-color" content="#1A237E">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- iOS meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="שמוקי טוק">
+
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="manifest" href="manifest.json">
+
+  <title>שמוקי טוק</title>
+
+  <style>
+    body {
+      background-color: #1A237E;
+      margin: 0;
+      padding: 0;
+    }
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: white;
+      direction: rtl;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .app-name {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .app-tagline {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div style="font-size: 60px; margin-bottom: 16px;">📻</div>
+    <div class="app-name">שמוקי טוק</div>
+    <div class="app-tagline">מכשיר הקשר הפרטי שלך</div>
+    <div style="height: 32px;"></div>
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      document.getElementById('loading').remove();
+    });
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

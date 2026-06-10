@@ -1,0 +1,28 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "rooms",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "inviteCode", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "members",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "lastSeen", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "priority", "order": "DESCENDING" },
+        { "fieldPath": "joinedAt", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
