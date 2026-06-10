@@ -153,6 +153,17 @@ h1 {
 .badge.green { background: rgba(74,222,128,.15); color: var(--green); border: 1px solid var(--green); }
 .badge.red   { background: rgba(239,68,68,.15);  color: #f87171;     border: 1px solid #f87171; }
 .room-label  { color: var(--muted); font-size: .8rem; letter-spacing: 2px; }
+#leave-btn {
+  background: none;
+  border: 1px solid #4a5568;
+  color: var(--muted);
+  font-size: .75rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+#leave-btn:hover { border-color: #f87171; color: #f87171; }
 
 /* ── Device body ── */
 .device {

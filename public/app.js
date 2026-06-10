@@ -51,11 +51,18 @@ function doJoin(id) {
   socket.emit('join-room', id);
 }
 
+// Auto-rejoin saved room on page load
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('wt-room');
+  if (saved) doJoin(saved);
+});
+
 // ── Socket events ──────────────────────────────────────────────────────────
 
 socket.on('joined', ({ roomId: id, isInitiator: init }) => {
   roomId = id;
   isInitiator = init;
+  localStorage.setItem('wt-room', id);
   document.getElementById('room-code-display').textContent = id;
   document.getElementById('room-label').textContent = `חדר: ${id}`;
 
@@ -64,7 +71,10 @@ socket.on('joined', ({ roomId: id, isInitiator: init }) => {
   initMedia(); // kick off mic request right away (don't await – runs in background)
 });
 
-socket.on('room-full', () => alert('החדר מלא! נסה קוד אחר.'));
+socket.on('room-full', () => {
+  localStorage.removeItem('wt-room');
+  alert('החדר מלא! נסה קוד אחר.');
+});
 
 socket.on('ready', async () => {
   showScreen(walkieScreen);
@@ -198,3 +208,9 @@ function setStatus(connected) {
   el.textContent = connected ? '● מחובר' : '● מנותק';
   el.className = 'badge ' + (connected ? 'green' : 'red');
 }
+
+function leaveRoom() {
+  localStorage.removeItem('wt-room');
+  location.reload();
+}
+window.leaveRoom = leaveRoom;
