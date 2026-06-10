@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Walkie Talkie</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- Setup screen -->
+    <div id="setup-screen" class="screen active">
+      <div class="logo">
+        <div class="logo-icon">📻</div>
+        <h1>WALKIE TALKIE</h1>
+      </div>
+      <div class="card">
+        <button id="create-room-btn" class="btn btn-green">צור חדר חדש</button>
+        <div class="divider"><span>— או —</span></div>
+        <input id="room-input" type="text" placeholder="הכנס קוד חדר" maxlength="6" autocomplete="off" autocapitalize="characters">
+        <button id="join-room-btn" class="btn btn-blue">הצטרף לחדר</button>
+      </div>
+    </div>
+
+    <!-- Waiting screen -->
+    <div id="waiting-screen" class="screen">
+      <div class="logo">
+        <div class="logo-icon">📻</div>
+        <h1>WALKIE TALKIE</h1>
+      </div>
+      <div class="card center">
+        <p class="label">קוד החדר שלך</p>
+        <div id="room-code-display" class="room-code"></div>
+        <p class="hint">שתף את הקוד עם החבר שלך</p>
+        <div class="dots">
+          <span></span><span></span><span></span>
+        </div>
+        <p class="waiting-text">ממתין לחיבור...</p>
+      </div>
+    </div>
+
+    <!-- Walkie-talkie screen -->
+    <div id="walkie-screen" class="screen">
+      <div class="top-bar">
+        <span id="conn-status" class="badge green">● מחובר</span>
+        <span id="room-label" class="room-label"></span>
+      </div>
+
+      <div class="device">
+        <!-- Speaker grille -->
+        <div class="grille">
+          <div class="grille-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="grille-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="grille-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="grille-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <!-- Display -->
+        <div class="display">
+          <div id="display-content" class="display-standby">STANDBY</div>
+          <div id="peer-talking" class="peer-talking hidden">
+            <span class="pulse-dot"></span> הצד השני מדבר
+          </div>
+        </div>
+
+        <!-- PTT Button -->
+        <div class="ptt-area">
+          <button
+            id="ptt-btn"
+            class="ptt"
+            ontouchstart="pttStart(event)"
+            ontouchend="pttEnd(event)"
+            ontouchcancel="pttEnd(event)"
+            onmousedown="pttStart(event)"
+            onmouseup="pttEnd(event)"
+            onmouseleave="pttEnd(event)"
+          >
+            <svg class="mic" viewBox="0 0 24 24">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+            <span id="ptt-label">לחץ להעביר</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
